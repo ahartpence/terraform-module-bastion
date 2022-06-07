@@ -66,7 +66,8 @@ resource "aws_instance" "bastion" {
     connection {
         type = "ssh"
         user = "ubuntu"
-        private_key = "${file("${var.aws_key_file}")}"
+        host = self.public_ip
+        private_key = file(var.aws_key_file)
     }
   }
 
@@ -75,6 +76,7 @@ resource "aws_instance" "bastion" {
     source = var.aws_key_file
     destination = "/home/ubuntu/.ssh/bosh.pem"
     connection {
+      host = self.public_ip
       type = "ssh"
       user = "ubuntu"
       private_key = file(var.aws_key_file)
