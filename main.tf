@@ -7,6 +7,7 @@ variable "aws_key_name"           {}
 variable "aws_key_file"           {}
 variable "vpc_security_group_ids" {} # [aws_security_group.dmz.id]
 variable "subnet_id"              {} # aws_subnet.dmz.id
+variable "resource_tags"          {}
 
 #
 # Generic Ubuntu AMI
@@ -53,7 +54,8 @@ resource "aws_instance" "bastion" {
     delete_on_termination = true
   }
 
-  tags = { Name = "bastion" }
+
+  tags     = merge({Name = "bastion"}, var.resource_tags)
 
   provisioner "remote-exec" {
     inline = [
