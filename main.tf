@@ -50,19 +50,33 @@ resource "aws_instance" "bastion" {
   tags     = merge({Name = "bastion"}, var.resource_tags)
 
   root_block_device {
-    volume_size           = "20"
+    volume_size           = "50"
     volume_type           = "gp2"
     encrypted             = true
+    tags                  = merge({Name = "bastion_root_block_device"}, var.resource_tags)
     delete_on_termination = true
   }
-  
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo curl -o /usr/local/bin/jumpbox https://raw.githubusercontent.com/starkandwayne/jumpbox/master/bin/jumpbox",
+      "sudo chmod 0755 /usr/local/bin/jumpbox",
+      "#sudo jumpbox system"
+    ]
+    connection {
+        type = "ssh"
+        user = "ubuntu"
+        private_key = "${file("${var.aws_key_file}")}"
+    }
+  }
+
+
   provisioner "file" {
     source = var.aws_key_file
     destination = "/home/ubuntu/.ssh/bosh.pem"
     connection {
       type = "ssh"
       user = "ubuntu"
-      host = "nfs-server"
       private_key = file(var.aws_key_file)
     }
   }
