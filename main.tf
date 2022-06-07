@@ -49,7 +49,13 @@ resource "aws_instance" "bastion" {
 
   tags     = merge({Name = "bastion"}, var.resource_tags)
 
-
+  root_block_device {
+    volume_size           = "20"
+    volume_type           = "gp2"
+    encrypted             = true
+    delete_on_termination = true
+  }
+  
   provisioner "file" {
     source = var.aws_key_file
     destination = "/home/ubuntu/.ssh/bosh.pem"
@@ -63,12 +69,7 @@ resource "aws_instance" "bastion" {
 }
 
 
-  root_block_device {
-    volume_size           = "20"
-    volume_type           = "gp2"
-    encrypted             = true
-    delete_on_termination = true
-  }
+
 
 output "box-bastion-public" {
   value = aws_instance.bastion.public_ip
