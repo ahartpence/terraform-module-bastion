@@ -47,29 +47,9 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = true
 
 
-  ebs_block_device {
-    device_name           = "/dev/xvda"
-    volume_size           = "100"
-    volume_type           = "gp2"
-    delete_on_termination = true
-  }
-
-
   tags     = merge({Name = "bastion"}, var.resource_tags)
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo curl -o /usr/local/bin/jumpbox https://raw.githubusercontent.com/starkandwayne/jumpbox/master/bin/jumpbox",
-      "sudo chmod 0755 /usr/local/bin/jumpbox",
-      "#sudo jumpbox system"
-    ]
-    connection {
-        type = "ssh"
-        user = "ubuntu"
-        host = "bastion"
-        private_key = file(var.aws_key_file)
-    }
-  }
+
   provisioner "file" {
     source = var.aws_key_file
     destination = "/home/ubuntu/.ssh/bosh.pem"
@@ -82,6 +62,13 @@ resource "aws_instance" "bastion" {
   }
 }
 
+
+  root_block_device {
+    volume_size           = "20"
+    volume_type           = "gp2"
+    encrypted             = true
+    delete_on_termination = true
+  }
 
 output "box-bastion-public" {
   value = aws_instance.bastion.public_ip
