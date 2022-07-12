@@ -39,17 +39,11 @@ variable "resource_tags"          {}
 #}
 
 
-How to get newer ami version listings:
-
-# aws ssm get-parameter --name /aws/service/marketplace/prod-amd2rg3s3i7tc/latest
-# or https://cloud-images.ubuntu.com/locator/?_ga=2.47866031.900117794.1657655720-334238461.1657655720
-
 variable "aws_ubuntu_ami" {
   default = {
     us-west-2      = "ami-005414fb846dc12d1"
   }
 }
-
 
 
 resource "aws_instance" "bastion" {
