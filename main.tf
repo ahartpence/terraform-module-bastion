@@ -19,24 +19,38 @@ variable "resource_tags"          {}
 #
 # The username to log into the bastion is `ubuntu'
 
+#variable "aws_ubuntu_ami" {
+#  default = {
+#    ap-northeast-1 = "ami-033cdfcdd17e140cc"
+#    ap-northeast-2 = "ami-0b04c9bf8abfa5b89"
+#    ap-south-1     = "ami-0807bb2b5888ad68c"
+#    ap-southeast-1 = "ami-012e97ef137a3f446"
+#    ap-southeast-2 = "ami-0b1f854598cf629f6"
+#    ca-central-1   = "ami-01428c87658222f33"
+#    eu-central-1   = "ami-0dfd7cad24d571c54"
+#    eu-west-1      = "ami-0aebeb281fdee5054"
+#    eu-west-2      = "ami-03f2ee00e9dc6b85f"
+#    sa-east-1      = "ami-0389698ad66808197"
+#    us-east-1      = "ami-0977029b5b13f3d08"
+#    us-east-2      = "ami-05f39e7b7f153bc6a"
+#    us-west-1      = "ami-03d5270fcb641f79b"
+#    us-west-2      = "ami-0f47ef92b4218ec09"
+#  }
+#}
+
+
+How to get newer ami version listings:
+
+# aws ssm get-parameter --name /aws/service/marketplace/prod-amd2rg3s3i7tc/latest
+# or https://cloud-images.ubuntu.com/locator/?_ga=2.47866031.900117794.1657655720-334238461.1657655720
+
 variable "aws_ubuntu_ami" {
   default = {
-    ap-northeast-1 = "ami-033cdfcdd17e140cc"
-    ap-northeast-2 = "ami-0b04c9bf8abfa5b89"
-    ap-south-1     = "ami-0807bb2b5888ad68c"
-    ap-southeast-1 = "ami-012e97ef137a3f446"
-    ap-southeast-2 = "ami-0b1f854598cf629f6"
-    ca-central-1   = "ami-01428c87658222f33"
-    eu-central-1   = "ami-0dfd7cad24d571c54"
-    eu-west-1      = "ami-0aebeb281fdee5054"
-    eu-west-2      = "ami-03f2ee00e9dc6b85f"
-    sa-east-1      = "ami-0389698ad66808197"
-    us-east-1      = "ami-0977029b5b13f3d08"
-    us-east-2      = "ami-05f39e7b7f153bc6a"
-    us-west-1      = "ami-03d5270fcb641f79b"
-    us-west-2      = "ami-0f47ef92b4218ec09"
+    us-west-2      = "ami-005414fb846dc12d1"
   }
 }
+
+
 
 resource "aws_instance" "bastion" {
   ami                         = lookup(var.aws_ubuntu_ami, var.aws_region)

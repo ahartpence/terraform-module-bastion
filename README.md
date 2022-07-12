@@ -22,8 +22,6 @@ Outputs:
 After creation, run the following once in an ssh session:
 
 ```
-sudo curl -o /usr/local/bin/jumpbox https://raw.githubusercontent.com/starkandwayne/jumpbox/master/bin/jumpbox
-sudo chmod 0755 /usr/local/bin/jumpbox
 sudo jumpbox system
 ```
 
