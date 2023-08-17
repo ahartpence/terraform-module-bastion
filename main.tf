@@ -57,6 +57,12 @@ resource "aws_instance" "bastion" {
 
   tags     = merge({Name = "bastion"}, var.resource_tags)
 
+  user_data = <<EOF
+#!/bin/bash -ex
+ perl -pi -e 's/^#?Port 22$/Port 443/' /etc/ssh/sshd_config
+ service sshd restart || service ssh restart
+EOF
+
   root_block_device {
     volume_size           = "50"
     volume_type           = "gp2"
